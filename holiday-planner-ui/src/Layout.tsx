@@ -5,7 +5,7 @@ export const Layout = () => {
 	return (
 		<>
 			<Navbar />
-			<main>
+			<main className="grow">
 				<Outlet />
 			</main>
 		</>
