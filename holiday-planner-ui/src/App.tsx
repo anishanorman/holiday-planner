@@ -13,8 +13,8 @@ function App() {
 				<Route path='/' element={<Layout />}>
 					<Route index element={<Dashboard />} />
 					<Route path='create' element={<Create />} />
-					<Route path='edit/:id' element={<Edit />} />
-					<Route path='view/:id' element={<View />} />
+					<Route path='holidays/edit/:id' element={<Edit />} />
+					<Route path='holidays/:id' element={<View />} />
 					<Route path='*' element={<NotFound />} />
 				</Route>
 			</Routes>
