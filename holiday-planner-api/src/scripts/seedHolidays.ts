@@ -9,7 +9,7 @@ const seedHolidays = async () => {
 			image: {
 				photographer: "Aleksandar Pasaric",
 				photographerUrl: "https://www.pexels.com/@apasaric",
-				url: "https://images.pexels.com/photos/1285625/pexels-photo-1285625.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
+				src: "https://images.pexels.com/photos/1285625/pexels-photo-1285625.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
 				alt: "White Concrete House Near Body of Water Under White and Blue Cloudy Sky",
 			},
 		},
@@ -20,7 +20,7 @@ const seedHolidays = async () => {
 			image: {
 				photographer: "Mohamed Sarim",
 				photographerUrl: "https://www.pexels.com/@sarimphotos",
-				url: "https://images.pexels.com/photos/1033729/pexels-photo-1033729.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
+				src: "https://images.pexels.com/photos/1033729/pexels-photo-1033729.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
 				alt: "Dirt Road Surrounded by Trees",
 			},
 		},
@@ -31,7 +31,7 @@ const seedHolidays = async () => {
 			image: {
 				photographer: "Chait Goli",
 				photographerUrl: "https://www.pexels.com/@chaitaastic",
-				url: "https://images.pexels.com/photos/1797161/pexels-photo-1797161.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
+				src: "https://images.pexels.com/photos/1797161/pexels-photo-1797161.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
 				alt: "Colusseum, Italy",
 			},
 		},
