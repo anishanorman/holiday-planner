@@ -9,9 +9,12 @@ interface Image {
     id: number;
     title: string;
     startDate: string;
-    endDate: string;
-    numberOfCities: number;
-    lastEdited: string; 
+    endDate: string; 
     image: Image;
+    flights: object;
+    activities: object;
+    accomodations: object;
+    createdAt: string;
+    updatedAt: string;
   }
   

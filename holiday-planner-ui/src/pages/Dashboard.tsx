@@ -26,8 +26,8 @@ export const Dashboard = () => {
 		return <p>{error.message}</p>;
 	}
 
-	const holidays = [...data, ...data].sort((a: Holiday, b: Holiday) => {
-		return new Date(b.lastEdited).getTime() - new Date(a.lastEdited).getTime();
+	const holidays = [...data].sort((a: Holiday, b: Holiday) => {
+		return new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime();
 	});
 
 	return (

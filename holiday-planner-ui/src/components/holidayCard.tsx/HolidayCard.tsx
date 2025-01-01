@@ -50,14 +50,9 @@ export const HolidayCard = ({ holiday }: { holiday: Holiday }) => {
 
                 <h3 className="text-xl font-bold mb-2">{holiday.title}</h3>
 
-                <p>
-                    {holiday.numberOfCities}{" "}
-                    {holiday.numberOfCities > 1 ? "locations" : "location"}
-                </p>
-
                 <div className="mt-4 flex gap-6"></div>
                 <p className="text-sm text-gray-400">
-                    Last edited {getTimeAgo(holiday.lastEdited)}
+                    Last edited {getTimeAgo(holiday.updatedAt)}
                 </p>
             </div>
         </div>
