@@ -3,6 +3,7 @@ import express from "express";
 import holidaysRouter from "./routes/holidays";
 import sequelize from "./utils/database";
 import seedHolidays from "./scripts/seedHolidays";
+import pexelsRouter from "./routes/pexels";
 
 const app = express();
 const PORT = 5000;
@@ -11,6 +12,7 @@ app.use(cors());
 app.use(express.json());
 
 app.use("/api/holidays", holidaysRouter);
+app.use("/api/pexels", pexelsRouter)
 
 const initializeDatabase = async () => {
 	try {
