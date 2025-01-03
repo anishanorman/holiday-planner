@@ -5,6 +5,7 @@ import { ImageField } from "./fields/ImageField";
 import { TextField } from "./fields/TextField";
 import { validate } from "./validate";
 import { Image } from "../../utils/types";
+import { postHoliday } from "../../api/HolidayService";
 
 export interface NewHolidayFormValues {
 	title: string;
@@ -16,27 +17,6 @@ export interface NewHolidayFormValues {
 
 export const NewHolidayForm = () => {
 	const navigate = useNavigate();
-
-	const postHoliday = async (values: NewHolidayFormValues) => {
-		const response = await fetch("http://localhost:5000/api/holidays", {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify({
-				title: values.title,
-				startDate: values.startDate,
-				endDate: values.endDate,
-				image: values.selectedImage,
-			}),
-		});
-
-		if (!response.ok) {
-			throw new Error("An error occurred while creating the holiday");
-		}
-
-		return response.json();
-	};
 
 	return (
 		<div className="flex flex-col items-center justify-center bg-white px-16 py-10 rounded-lg shadow-lg">

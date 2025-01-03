@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Image } from "../../../utils/types";
 import { Spinner } from "../../Spinner";
 import { TextField } from "./TextField";
+import { getImages } from "../../../api/ImageService";
 
 export const ImageField = ({
 	name,
@@ -20,15 +21,7 @@ export const ImageField = ({
 
 	const { data, isLoading, error } = useQuery({
 		queryKey: ["images", query],
-		queryFn: async () => {
-			const response = await fetch(
-				`http://localhost:5000/api/pexels/search?query=${query}`
-			);
-			if (!response.ok) {
-				throw new Error("An error occurred while fetching images");
-			}
-			return response.json();
-		},
+		queryFn: () => getImages(query),
 		enabled: !!query,
 	});
 
