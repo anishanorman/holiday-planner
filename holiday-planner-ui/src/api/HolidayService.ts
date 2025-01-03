@@ -1,11 +1,19 @@
 import { NewHolidayFormValues } from "../components/newHolidayForm/NewHolidayForm";
+import { Holiday } from "../utils/types";
 
 export const getHolidays = async () => {
 	const response = await fetch("http://localhost:5000/api/holidays");
 	if (!response.ok) {
 		throw new Error("An error occurred while fetching the holidays data");
 	}
-	return await response.json();
+
+	const data: Holiday[] = await response.json();
+
+	const result = data.sort((a: Holiday, b: Holiday) => {
+		return new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime();
+	});
+
+	return result;
 };
 
 export const postHoliday = async (values: NewHolidayFormValues) => {

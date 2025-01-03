@@ -10,8 +10,8 @@ export const TextField = ({
 	label: string;
 	[key: string]: any;
 }) => {
-	const [field, meta, helpers] = useField(name);
-	const { setValue, setError } = helpers;
+	const [field, , helpers] = useField(name);
+	const { setValue } = helpers;
 
 	return (
 		<MUITextField
@@ -34,9 +34,6 @@ export const TextField = ({
 			variant="standard"
 			fullWidth
 			autoComplete="off"
-			error={Boolean(meta.touched && meta.error)}
-			helperText={meta.touched && meta.error ? meta.error : ""}
-			onFocus={() => setError("")}
 			size="small"
 		/>
 	);

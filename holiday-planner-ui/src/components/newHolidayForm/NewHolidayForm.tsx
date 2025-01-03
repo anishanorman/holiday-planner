@@ -1,11 +1,11 @@
 import { Form, Formik } from "formik";
 import { useNavigate } from "react-router";
+import { postHoliday } from "../../api/HolidayService";
+import { Image } from "../../utils/types";
 import { DateField } from "./fields/DateField";
 import { ImageField } from "./fields/ImageField";
 import { TextField } from "./fields/TextField";
 import { validate } from "./validate";
-import { Image } from "../../utils/types";
-import { postHoliday } from "../../api/HolidayService";
 
 export interface NewHolidayFormValues {
 	title: string;
@@ -44,11 +44,17 @@ export const NewHolidayForm = () => {
 					});
 				}}
 			>
-				{({ values, setFieldValue }) => (
+				{({ values, setFieldValue, touched, errors, setFieldError }) => (
 					<Form className="flex flex-col gap-6 items-center">
 						<div className="flex flex-col gap-6 w-full">
 							<div>
-								<TextField name="title" label="Title" />
+								<TextField
+									name="title"
+									label="Title"
+									error={Boolean(touched.title && errors.title)}
+									helperText={touched.title && errors.title ? errors.title : ""}
+									onFocus={() => setFieldError("title", "")}
+								/>
 							</div>
 
 							<div className="flex items-center">
