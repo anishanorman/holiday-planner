@@ -27,11 +27,23 @@ export const getTimeAgo = (date: string) => {
 	const parsedDate = new Date(date);
 	const now = new Date();
 	const diff = now.getTime() - parsedDate.getTime();
-	const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+	const minutes = Math.floor(diff / (1000 * 60));
 
-	if (days === 0) {
-		return "today";
+	if (minutes < 1) {
+		return "just now";
 	}
+
+	if (minutes < 60) {
+		return `${minutes} minute${minutes !== 1 ? "s" : ""} ago`;
+	}
+
+	const hours = Math.floor(minutes / 60);
+
+	if (hours < 24) {
+		return `${hours} hour${hours !== 1 ? "s" : ""} ago`;
+	}
+
+	const days = Math.floor(hours / 24);
 
 	if (days < 30) {
 		return `${days} day${days !== 1 ? "s" : ""} ago`;

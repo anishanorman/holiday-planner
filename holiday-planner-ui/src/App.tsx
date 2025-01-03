@@ -1,6 +1,6 @@
 import { BrowserRouter, Route, Routes } from 'react-router';
 import { Layout } from './Layout';
-import { Create } from './pages/Create';
+import { NewHoliday } from './pages/NewHoliday';
 import { Dashboard } from './pages/Dashboard';
 import { Edit } from './pages/Edit';
 import { NotFound } from './pages/NotFound';
@@ -12,7 +12,7 @@ function App() {
 			<Routes>
 				<Route path='/' element={<Layout />}>
 					<Route index element={<Dashboard />} />
-					<Route path='create' element={<Create />} />
+					<Route path='holidays/new' element={<NewHoliday />} />
 					<Route path='holidays/edit/:id' element={<Edit />} />
 					<Route path='holidays/:id' element={<View />} />
 					<Route path='*' element={<NotFound />} />

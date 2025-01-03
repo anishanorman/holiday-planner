@@ -1,7 +1,7 @@
-interface Image {
+export interface Image {
     photographer: string;
     photographerUrl: string;
-    url: string;
+    src: string;
     alt: string;
   }
   

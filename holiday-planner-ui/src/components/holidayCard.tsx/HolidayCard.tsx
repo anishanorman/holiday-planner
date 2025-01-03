@@ -32,7 +32,7 @@ export const HolidayCard = ({ holiday }: { holiday: Holiday }) => {
             onMouseLeave={handleMouseLeave}
         >
             <img
-                src={holiday.image.url}
+                src={holiday.image.src}
                 alt={holiday.image.alt}
                 className="h-52 w-full object-top object-cover aspect-auto rounded-t"
             />
@@ -44,7 +44,7 @@ export const HolidayCard = ({ holiday }: { holiday: Holiday }) => {
                         className={`text-gray-500 ${showEditButton} hover:scale-[1.2] transition-transform`}
                         onClick={(e) => e.stopPropagation()}
                     >
-                        <span className="text-lg material-icons">edit</span>
+                        <span className="text-lg material-symbols-outlined">edit</span>
                     </a>
                 </div>
 
