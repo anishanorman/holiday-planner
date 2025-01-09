@@ -16,6 +16,15 @@ export const getHolidays = async () => {
 	return result;
 };
 
+export const getHoliday = async (id: string): Promise<Holiday> => {
+    const response = await fetch(`http://localhost:5000/api/holidays/${id}`)
+    if (!response.ok) {
+        throw new Error("An error occured while fetching the holiday");
+    }
+
+    return await response.json();
+}
+
 export const postHoliday = async (values: NewHolidayFormValues) => {
 	const response = await fetch("http://localhost:5000/api/holidays", {
 		method: "POST",

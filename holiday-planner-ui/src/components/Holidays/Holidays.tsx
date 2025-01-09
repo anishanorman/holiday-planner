@@ -2,7 +2,7 @@ import { Alert } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 import { getHolidays } from "../../api/HolidayService";
 import { Holiday } from "../../utils/types";
-import { Spinner } from "../Spinner";
+import { Spinner } from "../UIComponents/Spinner";
 import { HolidayCard } from "./HolidayCard";
 
 export const Holidays = () => {
@@ -16,7 +16,11 @@ export const Holidays = () => {
 	}
 
 	if (error) {
-		return <Alert severity="error">Sorry, something went wrong. Please try again later.</Alert>;
+		return (
+			<Alert severity="error">
+				Sorry, something went wrong. Please try again later.
+			</Alert>
+		);
 	}
 
 	return (

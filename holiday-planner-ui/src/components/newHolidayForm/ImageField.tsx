@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { NewHolidayFormValues } from "../NewHolidayForm";
+import { TextField } from "../Fields/TextField";
 import { ImageSelection } from "./ImageSelection";
-import { TextField } from "./TextField";
+import { NewHolidayFormValues } from "./NewHolidayForm";
 
 interface ImageFieldProps {
 	name: string;
@@ -17,8 +17,6 @@ export const ImageField = ({
 }: ImageFieldProps) => {
 	const [query, setQuery] = useState("holiday");
 	const [queryError, setQueryError] = useState(false);
-
-	console.log(queryError)
 
 	return (
 		<div className="flex flex-col gap-6 border-b w-full" {...props}>

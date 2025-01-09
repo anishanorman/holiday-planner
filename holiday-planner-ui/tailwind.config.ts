@@ -6,7 +6,11 @@ export default {
     './index.html',
   ],
   theme: {
-    extend: {},
+    extend: {
+      fontSize: {
+        'xxs': '.7rem',
+      },
+    },
   },
   plugins: [],
 } satisfies Config
