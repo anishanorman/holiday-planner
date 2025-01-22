@@ -12,20 +12,6 @@ const seedHolidays = async () => {
 				src: "https://images.pexels.com/photos/1285625/pexels-photo-1285625.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
 				alt: "White Concrete House Near Body of Water Under White and Blue Cloudy Sky",
 			},
-			flights: {
-				complete: true,
-				details: [
-					{
-						airline: "Aegean Airlines",
-						flightNumber: "A3 453",
-						departure: "2024-07-10T08:00:00Z",
-						arrival: "2024-07-10T14:00:00Z",
-						departureAirport: "JFK",
-						arrivalAirport: "Santorini International Airport",
-						booked: true,
-					},
-				],
-			},
 			accommodation: {
 				complete: true,
 				details: [
@@ -33,7 +19,7 @@ const seedHolidays = async () => {
 						name: "Santorini Luxury Suites",
 						checkIn: "2024-07-10",
 						checkOut: "2024-07-20",
-						address: "Santorini, Greece",
+						location: "Santorini, Greece",
 						booked: true,
 					},
 				],
@@ -65,10 +51,6 @@ const seedHolidays = async () => {
 				src: "https://images.pexels.com/photos/1033729/pexels-photo-1033729.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
 				alt: "Dirt Road Surrounded by Trees",
 			},
-			flights: {
-				complete: false,
-				details: [],
-			},
 			accommodation: {
 				complete: true,
 				details: [
@@ -76,7 +58,7 @@ const seedHolidays = async () => {
 						name: "Tropical Beach Resort",
 						checkIn: "2024-06-01",
 						checkOut: "2024-06-21",
-						address: "Maldives",
+						location: "Maldives",
 						booked: true,
 					},
 				],
@@ -107,20 +89,6 @@ const seedHolidays = async () => {
 				photographerUrl: "https://www.pexels.com/@chaitaastic",
 				src: "https://images.pexels.com/photos/1797161/pexels-photo-1797161.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
 				alt: "Colosseum, Italy",
-			},
-			flights: {
-				complete: false,
-				details: [
-					{
-						airline: "Alitalia",
-						flightNumber: "AZ 609",
-						departure: "2024-12-15T18:00:00Z",
-						arrival: "2024-12-16T08:00:00Z",
-						departureAirport: "JFK",
-						arrivalAirport: "Rome Fiumicino",
-						booked: false,
-					},
-				],
 			},
 			accommodation: {
 				complete: false,
