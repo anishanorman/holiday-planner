@@ -8,19 +8,26 @@ function getOrdinalSuffix(day: number): string {
 		: "th";
 }
 
-export const getFriendlyDate = (date: string) => {
+export const getFriendlyDate = (date: string, length: "short" | "long") => {
 	const parsedDate = new Date(date);
 
 	const day = parsedDate.getDate();
 	const ordinal = getOrdinalSuffix(day);
-	const month = parsedDate.toLocaleString("default", { month: "short" });
+	const month = parsedDate.toLocaleString("default", { month: length });
 	const year = parsedDate.getFullYear();
 
 	return `${day}${ordinal} ${month} ${year}`;
 };
 
-export const getFriendlyDateRange = (startDate: string, endDate: string) => {
-	return `${getFriendlyDate(startDate)} - ${getFriendlyDate(endDate)}`;
+export const getFriendlyDateRange = (
+	startDate: string,
+	endDate: string,
+	length: "short" | "long"
+) => {
+	return `${getFriendlyDate(startDate, length)} - ${getFriendlyDate(
+		endDate,
+		length
+	)}`;
 };
 
 export const getTimeAgo = (date: string) => {
@@ -58,4 +65,28 @@ export const getTimeAgo = (date: string) => {
 	const years = Math.floor(months / 12);
 
 	return `${years} year${years !== 1 ? "s" : ""} ago`;
+};
+
+export const getTimeFromDate = (date: string) => {
+	const parsedDate = new Date(date);
+	return parsedDate.toLocaleTimeString("en-GB", {
+		hour: "2-digit",
+		minute: "2-digit",
+	});
+};
+
+export const getDayOfWeek = (date: string, length: "short" | "long") => {
+	const parsedDate = new Date(date);
+	return parsedDate.toLocaleString("default", { weekday: length });
+};
+
+export const getHoursFromDuration = (duration: string | undefined) => {
+	if (!duration) return "";
+	return duration.split("h")[0];
+};
+
+export const getMinutesFromDuration = (duration: string | undefined) => {
+	if (!duration) return "";
+	const minutesPart = duration.split("h ")[1];
+	return minutesPart ? minutesPart.split("m")[0] || "0" : "0";
 };

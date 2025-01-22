@@ -16,7 +16,11 @@ export const Holidays = () => {
 	}
 
 	if (error) {
-		return <Alert severity="error">Sorry, something went wrong. Please try again later.</Alert>;
+		return (
+			<Alert severity="error">
+				Sorry, something went wrong. Please try again later.
+			</Alert>
+		);
 	}
 
 	return (

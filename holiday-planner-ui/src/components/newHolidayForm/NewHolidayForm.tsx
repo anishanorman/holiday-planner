@@ -2,9 +2,9 @@ import { Form, Formik } from "formik";
 import { useNavigate } from "react-router";
 import { postHoliday } from "../../api/HolidayService";
 import { Image } from "../../utils/types";
-import { DateField } from "./fields/DateField";
-import { ImageField } from "./fields/ImageField";
-import { TextField } from "./fields/TextField";
+import { DateField } from "../Fields/DateField";
+import { TextField } from "../Fields/TextField";
+import { ImageField } from "./ImageField";
 import { validate } from "./validate";
 
 export interface NewHolidayFormValues {

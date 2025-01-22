@@ -1,8 +1,8 @@
 import { Alert, Checkbox } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
-import { getImages } from "../../../api/ImageService";
-import { Image } from "../../../utils/types";
-import { Spinner } from "../../Spinner";
+import { getImages } from "../../api/ImageService";
+import { Image } from "../../utils/types";
+import { Spinner } from "../Spinner";
 
 interface ImageSelectionProps {
 	query: string;
@@ -15,7 +15,6 @@ export const ImageSelection = ({
 	setFieldValue,
 	selectedImage,
 }: ImageSelectionProps) => {
-
 	const { isLoading, data, error } = useQuery({
 		queryKey: ["images", query],
 		queryFn: () => getImages(query),

@@ -16,7 +16,7 @@ export const HolidayCard = ({ holiday }: { holiday: Holiday }) => {
 
     const navigate = useNavigate();
 
-    const dateRange = getFriendlyDateRange(holiday.startDate, holiday.endDate);
+    const dateRange = getFriendlyDateRange(holiday.startDate, holiday.endDate, 'short');
 
     const handleCardClick = () => {
         navigate(`/holidays/${holiday.id}`);
