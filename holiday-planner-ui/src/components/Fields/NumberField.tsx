@@ -1,3 +1,4 @@
+import { useField } from "formik";
 import { TextField } from "./TextField";
 
 interface NumberFieldProps {
@@ -6,12 +7,20 @@ interface NumberFieldProps {
 }
 
 export const NumberField = ({ name, label }: NumberFieldProps) => {
+
+		const [, meta, helpers] = useField(name);
+
+		const { setError } = helpers;
+
 	return (
 		<div className="w-24">
 			<TextField
 				type="number"
 				name={name}
 				label={label}
+				error={Boolean(meta.touched && meta.error)}
+				helperText={meta.touched && meta.error ? meta.error : ""}
+				onFocus={() => setError("")}
 				slotProps={{
 					htmlInput: {
 						step: 1,

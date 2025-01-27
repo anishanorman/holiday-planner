@@ -13,14 +13,14 @@ export const formatFormValues = (values: FlightFormValues, holidayId: number) =>
 			flightNumber: values.flightNumber,
 			departure: {
 				time: values.departureTime?.format('YYYY-MM-DDTHH:mm:ss'),
-				place: values.departureCity,
+				place: values.placeOfDeparture,
 				airport: {
 					iata: values.departureAirport,
 				}
 			},
 			arrival: {
 				time: values.arrivalTime?.format('YYYY-MM-DDTHH:mm:ss'),
-				place: values.arrivalCity,
+				place: values.placeOfArrival,
 				airport: {
 					iata: values.arrivalAirport,
 				}
@@ -45,10 +45,10 @@ export const formatFormValues = (values: FlightFormValues, holidayId: number) =>
 			date: values.date?.format('YYYY-MM-DD'),
 			booked: false,
 			departure: {
-				place: values.departureCity
+				place: values.placeOfDeparture
 			},
 			arrival: {
-				place: values.arrivalCity
+				place: values.placeOfArrival
 			}
 		} as UnbookedFlight;
 	}

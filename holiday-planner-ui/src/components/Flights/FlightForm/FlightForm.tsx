@@ -12,10 +12,11 @@ import { SwitchField } from "../../Fields/SwitchField";
 import { TextField } from "../../Fields/TextField";
 import { IconButton } from "../../IconButton";
 import { formatFormValues } from "./FlightForm.helpers";
+import { validationSchema } from "./validationSchema";
 
 export interface FlightFormValues {
-	departureCity?: string;
-	arrivalCity?: string;
+	placeOfDeparture?: string;
+	placeOfArrival?: string;
 	date?: Dayjs;
 	booked?: boolean;
 	airlineQuery?: string;
@@ -47,31 +48,31 @@ export const FlightForm = ({ selectedFlight, onClose }: FlightFormProps) => {
 	const horizontalGap = "gap-8";
 
 	const initialValues: FlightFormValues = {
-		departureCity: selectedFlight?.departure?.place || "",
-		arrivalCity: selectedFlight?.arrival?.place || "",
-		date: dayjs(selectedFlight?.date) || undefined,
+		placeOfDeparture: selectedFlight?.departure?.place,
+		placeOfArrival: selectedFlight?.arrival?.place,
+		date: dayjs(selectedFlight?.date),
 		booked: Boolean(selectedFlight?.booked),
 		airlineQuery: "",
-		airline: selectedFlight?.booked ? selectedFlight?.airline?.name || "" : "",
+		airline: selectedFlight?.booked ? selectedFlight.airline.name : undefined,
 		flightNumber: selectedFlight?.booked
-			? selectedFlight?.flightNumber || ""
-			: "",
+			? selectedFlight?.flightNumber
+			: undefined,
 		departureTime: selectedFlight?.booked
-			? dayjs(selectedFlight?.departure?.time) || ""
+			? dayjs(selectedFlight?.departure?.time)
 			: undefined,
 		departureAirport: selectedFlight?.booked
-			? selectedFlight?.departure?.airport?.iata || ""
+			? selectedFlight?.departure?.airport?.iata
 			: "",
 		arrivalTime: selectedFlight?.booked
 			? dayjs(selectedFlight?.arrival?.time) || undefined
 			: undefined,
 		arrivalAirport: selectedFlight?.booked
-			? selectedFlight?.arrival?.airport?.iata || ""
+			? selectedFlight?.arrival?.airport?.iata
 			: "",
-		hours: selectedFlight?.booked ? selectedFlight?.duration?.hours || 0 : 0,
+		hours: selectedFlight?.booked ? selectedFlight?.duration?.hours : undefined,
 		minutes: selectedFlight?.booked
-			? selectedFlight?.duration?.minutes || 0
-			: 0,
+			? selectedFlight?.duration?.minutes
+			: undefined,
 		direct: selectedFlight?.booked ? selectedFlight?.stops?.length === 0 : true,
 		stops: selectedFlight?.booked
 			? selectedFlight?.stops?.map((stop) => ({
@@ -88,6 +89,7 @@ export const FlightForm = ({ selectedFlight, onClose }: FlightFormProps) => {
 			validateOnChange={false}
 			validateOnBlur={false}
 			validateOnMount={false}
+			validationSchema={validationSchema}
 			onSubmit={async (values) => {
 				const formattedFormValues = formatFormValues(values, Number(id!));
 				if (selectedFlight?.id) {
@@ -105,27 +107,27 @@ export const FlightForm = ({ selectedFlight, onClose }: FlightFormProps) => {
 							className={`flex justify-between items-center ${horizontalGap}`}
 						>
 							<TextField
-								name="departureCity"
+								name="placeOfDeparture"
 								label="Place of Departure"
-								error={Boolean(touched.departureCity && errors.departureCity)}
+								error={Boolean(touched.placeOfDeparture && errors.placeOfDeparture)}
 								helperText={
-									touched.departureCity && errors.departureCity
-										? errors.departureCity
+									touched.placeOfDeparture && errors.placeOfDeparture
+										? errors.placeOfDeparture
 										: ""
 								}
-								onFocus={() => setFieldError("departureCity", "")}
+								onFocus={() => setFieldError("placeOfDeparture", "")}
 								className="grow"
 							/>
 							<TextField
-								name="arrivalCity"
+								name="placeOfArrival"
 								label="Place of Arrival"
-								error={Boolean(touched.arrivalCity && errors.arrivalCity)}
+								error={Boolean(touched.placeOfArrival && errors.placeOfArrival)}
 								helperText={
-									touched.arrivalCity && errors.arrivalCity
-										? errors.arrivalCity
+									touched.placeOfArrival && errors.placeOfArrival
+										? errors.placeOfArrival
 										: ""
 								}
-								onFocus={() => setFieldError("arrivalCity", "")}
+								onFocus={() => setFieldError("placeOfArrival", "")}
 								className="grow"
 							/>
 							<DateField name="date" label="Date" />
@@ -138,23 +140,47 @@ export const FlightForm = ({ selectedFlight, onClose }: FlightFormProps) => {
 									<TextField
 										name="airline"
 										label="Airline"
+										error={Boolean(touched.airline && errors.airline)}
+										helperText={
+											touched.airline && errors.airline ? errors.airline : ""
+										}
+										onFocus={() => setFieldError("airline", "")}
 										className="mb-1 grow"
 									/>
 									<TextField
 										name="flightNumber"
 										label="Flight number"
+										error={Boolean(touched.flightNumber && errors.flightNumber)}
+										helperText={
+											touched.flightNumber && errors.flightNumber
+												? errors.flightNumber
+												: ""
+										}
+										onFocus={() => setFieldError("flightNumber", "")}
 										className="w-32"
 									/>
-									<NumberField name="hours" label="Hours" />
-									<NumberField name="minutes" label="Minutes" />
+									<NumberField
+										name="hours"
+										label="Hours"
+									/>
+									<NumberField
+										name="minutes"
+										label="Minutes"
+									/>
 								</div>
 								<div className={`flex justify-between items-center`}>
-									<div className={`flex flex-col ${verticalGap}`}>
+									<div className={`flex flex-col`}>
+									<h2 className="font-medium">Departure</h2>
 										<div className="flex gap-6">
 											<DateTimeField name="departureTime" label="Date / Time" />
 											<TextField
 												name="departureAirport"
 												label="Airport code"
+												error={Boolean(touched.departureAirport && errors.departureAirport)}
+												helperText={
+													touched.departureAirport && errors.departureAirport ? errors.departureAirport : ""
+												}
+												onFocus={() => setFieldError("departureAirport", "")}
 												className="self-end w-24"
 												maxLength={3}
 											/>
@@ -163,7 +189,8 @@ export const FlightForm = ({ selectedFlight, onClose }: FlightFormProps) => {
 									<span className="material-symbols-outlined font-light text-5xl text-cyan-900">
 										trending_flat
 									</span>
-									<div className={`flex flex-col ${verticalGap}`}>
+									<div className={`flex flex-col`}>
+										<h2 className="font-medium">Arrival</h2>
 										<div className="flex gap-6">
 											<DateTimeField name="arrivalTime" label="Date / Time" />
 											<TextField
@@ -181,7 +208,6 @@ export const FlightForm = ({ selectedFlight, onClose }: FlightFormProps) => {
 										name="direct"
 										checked={values.direct}
 										onChange={(event) => {
-											console.log(event.target.checked);
 											setFieldValue(
 												"stops",
 												event.target.checked
@@ -237,7 +263,8 @@ export const FlightForm = ({ selectedFlight, onClose }: FlightFormProps) => {
 														onClick={() =>
 															arrayHelpers.push({
 																airportCode: "",
-																duration: "",
+																hours: undefined,
+																minutes: undefined
 															})
 														}
 														icon="add"

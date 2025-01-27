@@ -1,8 +1,4 @@
-import {
-	InputAdornment,
-	inputBaseClasses,
-	TextField as MUITextField,
-} from "@mui/material";
+import { TextField as MUITextField } from "@mui/material";
 import { useField } from "formik";
 
 interface TextFieldProps {
@@ -24,8 +20,35 @@ export const TextField = ({
 	maxLength,
 	...props
 }: TextFieldProps) => {
-	const [field, , helpers] = useField(name);
-	const { setValue } = helpers;
+	const [field, meta, helpers] = useField(name);
+	const { setValue, setError } = helpers;
+
+	const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+		if (props.type === "number") {
+			if (
+				event.key === "-" ||
+				event.key === "e" ||
+				event.key === "." ||
+				event.key === "+"
+			) {
+				event.preventDefault();
+			}
+		}
+	};
+
+	const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+		if (props.type === "number") {
+			if (Number(event.target.value) <= 0) {
+				setValue('0');
+			} else if (Number(event.target.value) > 59) {
+				setValue(59);
+			} else {
+				setValue(Number(event.target.value));
+			}
+		} else {
+			setValue(event.target.value)
+		}
+	};
 
 	return (
 		<div className={`${className ? " " + className : ""}`}>
@@ -33,7 +56,11 @@ export const TextField = ({
 				{...props}
 				label={label}
 				value={field.value || ""}
-				onChange={(event) => setValue(event.target.value)}
+				error={Boolean(meta.touched && meta.error)}
+				helperText={meta.touched && meta.error ? meta.error : ""}
+				onFocus={() => setError("")}
+				onKeyDown={handleKeyDown}
+				onChange={handleChange}
 				onBlur={field.onBlur}
 				sx={{
 					"& label.Mui-focused": {
@@ -52,22 +79,6 @@ export const TextField = ({
 				size="small"
 				fullWidth
 				slotProps={{
-					input: {
-						endAdornment: (
-							<InputAdornment
-								position="end"
-								sx={{
-									opacity: 0,
-									pointerEvents: "none",
-									[`[data-shrink=true] ~ .${inputBaseClasses.root} > &`]: {
-										opacity: 1,
-									},
-								}}
-							>
-								{suffix}
-							</InputAdornment>
-						),
-					},
 					htmlInput: {
 						maxLength: maxLength,
 					},
