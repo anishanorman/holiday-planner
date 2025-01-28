@@ -1,4 +1,5 @@
 import fetch from "node-fetch";
+import { ApiError } from "../utils/errors";
 
 interface AirlineResponse {
 	iata: string;
@@ -13,25 +14,13 @@ interface AirlineResponse {
 
 interface AirportResponse {
 	iata: string;
-	icao: string;
 	city: string;
 	country: string;
 	name: string;
 	region: string;
-	elevation_ft: string;
 	latitude: string;
 	longitude: string;
 	timezone: string;
-}
-
-interface DefaultAirport {
-	iata: string;
-	name: string;
-	city: string;
-	region: string;
-	country: string;
-	latitude: string;
-	longitude: string;
 }
 
 interface DefaultAirline {
@@ -99,7 +88,7 @@ export async function searchAirlines(
 
 export async function getAirportByIATA(
 	query: string
-): Promise<AirportResponse | DefaultAirport> {
+): Promise<AirportResponse> {
 	const url = `https://api.api-ninjas.com/v1/airports?iata=${query}`;
 	const headers = {
 		"X-Api-Key": `${process.env.API_NINJAS_API_KEY}`,
@@ -108,21 +97,13 @@ export async function getAirportByIATA(
 	try {
 		const response = await fetch(url, { headers });
 		if (!response.ok) {
-			throw new Error(`Request failed with status: ${response.status}`);
+			throw new ApiError(response.status, `Request failed with status: ${response.status}`)
 		}
 
 		const data = (await response.json()) as AirportResponse[];
 
 		if (!data || data.length === 0) {
-			return {
-				iata: "UNKNOWN",
-				name: "Unknown Airport",
-				city: "Unknown City",
-				region: "Unknown Region",
-				country: "Unknown Country",
-				latitude: "0.0",
-				longitude: "0.0",
-			};
+			throw new ApiError(404, `Airport with IATA code '${query}' not found.`);
 		}
 
 		const result = {
@@ -133,20 +114,16 @@ export async function getAirportByIATA(
 			country: data[0].country,
 			latitude: data[0].latitude,
 			longitude: data[0].longitude,
+			timezone: data[0].timezone
 		};
 
 		return result;
 	} catch (error) {
+		if (error instanceof ApiError) {
+			throw error;
+		}
 		console.error("Error fetching airport data:", error);
-		return {
-			iata: "UNKNOWN",
-			name: "Unknown Airport",
-			city: "Unknown City",
-			region: "Unknown Region",
-			country: "Unknown Country",
-			latitude: "0.0",
-			longitude: "0.0",
-		};
+		throw new ApiError(500, "Internal server error while fetching airport data.");
 	}
 }
 

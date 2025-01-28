@@ -1,6 +1,7 @@
 import express from "express";
 import Flight from "../models/Flight";
 import { getAirportByIATA, searchAirlines } from "../services/airlineService";
+import { ApiError } from "../utils/errors";
 
 interface ReqBody {
 	holidayId: number;
@@ -107,15 +108,20 @@ router.put("/:id", async (req, res) => {
 			return;
 		}
 
-		const updatedFlightData = await expandFlightData(body);
-
-		flight.update(updatedFlightData);
-		res.status(200).json(flight);
-		return;
+		try {
+			const updatedFlightData = await expandFlightData(body);
+			await flight.update(updatedFlightData);
+			res.status(200).json(flight);
+		} catch (error) {
+			if (error instanceof ApiError) {
+				res.status(error.status).json({ message: error.message });
+				return;
+			}
+			throw error;
+		}
 	} catch (error) {
 		console.error("Error updating flight:", error);
 		res.status(500).json({ message: "Internal server error" });
-		return;
 	}
 });
 
