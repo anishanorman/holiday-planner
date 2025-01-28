@@ -109,7 +109,9 @@ export const FlightForm = ({ selectedFlight, onClose }: FlightFormProps) => {
 							<TextField
 								name="placeOfDeparture"
 								label="Place of Departure"
-								error={Boolean(touched.placeOfDeparture && errors.placeOfDeparture)}
+								error={Boolean(
+									touched.placeOfDeparture && errors.placeOfDeparture
+								)}
 								helperText={
 									touched.placeOfDeparture && errors.placeOfDeparture
 										? errors.placeOfDeparture
@@ -159,26 +161,24 @@ export const FlightForm = ({ selectedFlight, onClose }: FlightFormProps) => {
 										onFocus={() => setFieldError("flightNumber", "")}
 										className="w-32"
 									/>
-									<NumberField
-										name="hours"
-										label="Hours"
-									/>
-									<NumberField
-										name="minutes"
-										label="Minutes"
-									/>
+									<NumberField name="hours" label="Hours" />
+									<NumberField name="minutes" label="Minutes" />
 								</div>
 								<div className={`flex justify-between items-center`}>
 									<div className={`flex flex-col`}>
-									<h2 className="font-medium">Departure</h2>
+										<h2 className="font-medium">Departure</h2>
 										<div className="flex gap-6">
 											<DateTimeField name="departureTime" label="Date / Time" />
 											<TextField
 												name="departureAirport"
 												label="Airport code"
-												error={Boolean(touched.departureAirport && errors.departureAirport)}
+												error={Boolean(
+													touched.departureAirport && errors.departureAirport
+												)}
 												helperText={
-													touched.departureAirport && errors.departureAirport ? errors.departureAirport : ""
+													touched.departureAirport && errors.departureAirport
+														? errors.departureAirport
+														: ""
 												}
 												onFocus={() => setFieldError("departureAirport", "")}
 												className="self-end w-24"
@@ -208,12 +208,13 @@ export const FlightForm = ({ selectedFlight, onClose }: FlightFormProps) => {
 										name="direct"
 										checked={values.direct}
 										onChange={(event) => {
-											setFieldValue(
-												"stops",
-												event.target.checked
-													? []
-													: [{ airportCode: "", hours: 0, minutes: 0 }]
-											);
+											event.target.checked
+												? setTimeout(() => {
+														setFieldValue("stops", []);
+												  }, 200)
+												: setFieldValue("stops", [
+														{ airportCode: "", hours: 0, minutes: 0 },
+												  ]);
 											setFieldValue("direct", event.target.checked);
 										}}
 									/>
@@ -264,7 +265,7 @@ export const FlightForm = ({ selectedFlight, onClose }: FlightFormProps) => {
 															arrayHelpers.push({
 																airportCode: "",
 																hours: undefined,
-																minutes: undefined
+																minutes: undefined,
 															})
 														}
 														icon="add"
