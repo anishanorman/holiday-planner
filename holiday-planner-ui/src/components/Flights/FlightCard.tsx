@@ -1,6 +1,7 @@
 import { Alert, Tooltip } from "@mui/material";
 import { getFriendlyDate, getTimeFromDate } from "../../utils/dates";
 import { Flight } from "../../utils/types";
+import { Fragment } from "react/jsx-runtime";
 
 interface FlightCardProps {
 	flight: Flight;
@@ -8,10 +9,10 @@ interface FlightCardProps {
 }
 
 export const FlightCard = ({ flight, onClick }: FlightCardProps) => {
-
 	const isOvernightFlight =
 		flight.booked &&
-		new Date(flight.arrival.time).getDate() !== new Date(flight.departure.time).getDate();
+		new Date(flight.arrival.time).getDate() !==
+			new Date(flight.departure.time).getDate();
 
 	return (
 		<div
@@ -98,7 +99,9 @@ export const FlightCard = ({ flight, onClick }: FlightCardProps) => {
 								<p className="text-2xl font-bold leading-tight">
 									{flight.departure.airport.iata}
 								</p>
-								<p className="text-sm">{getTimeFromDate(flight.departure.time)}</p>
+								<p className="text-sm">
+									{getTimeFromDate(flight.departure.time)}
+								</p>
 							</div>
 							<div className="flex flex-col items-center justify-center grow">
 								<p className="text-sm">
@@ -107,18 +110,27 @@ export const FlightCard = ({ flight, onClick }: FlightCardProps) => {
 								<div className="w-full h-[2px] bg-cyan-600" />
 								<div className="items-center">
 									{flight.stops.length > 0 ? (
-										flight.stops.map((stop, index) => (
-											<div key={index} className="flex flex-col items-center">
-												<div className="absolute h-[6px] w-[6px] bg-cyan-600 -translate-y-[4px] rounded" />
-												<p className="text-sm">
-													{flight.stops.length} stop{flight.stops.length > 1 && "s"}
-												</p>
-												<p className="text-xxs text-gray-600">
-													{stop.airport.iata} {stop.duration.hours}hr{" "}
-													{stop.duration.minutes}min
-												</p>
+										<div className="flex flex-col items-center">
+											<div className="absolute h-[6px] w-[6px] bg-cyan-600 -translate-y-[4px] rounded" />
+											<p className="text-sm">
+												{flight.stops.length} stop
+												{flight.stops.length > 1 && "s"}
+											</p>
+											<div className="flex gap-2 flex-wrap">
+												{flight.stops.map((stop, index) => (
+													<Fragment key={index}>
+														<p key={index} className="text-xxs text-gray-600">
+															{stop.airport.iata}
+															{stop.duration.hours > 0 &&
+																` ${stop.duration.hours}hr`}
+															{stop.duration.minutes > 0 &&
+																` ${stop.duration.minutes}min`}
+														</p>
+														{index < flight.stops.length - 1 && (<p className="text-xxs text-gray-400">+</p>)}
+													</Fragment>
+												))}
 											</div>
-										))
+										</div>
 									) : (
 										<p className="text-sm">Direct</p>
 									)}
@@ -129,7 +141,9 @@ export const FlightCard = ({ flight, onClick }: FlightCardProps) => {
 									{flight.arrival.airport.iata}
 								</p>
 								<div className="flex">
-									<p className="text-sm">{getTimeFromDate(flight.arrival.time)}</p>
+									<p className="text-sm">
+										{getTimeFromDate(flight.arrival.time)}
+									</p>
 									{isOvernightFlight && (
 										<p className="text-xxs -translate-y-[1px]">+1</p>
 									)}
