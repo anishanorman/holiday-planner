@@ -1,9 +1,12 @@
 import { Checkbox, Collapse } from "@mui/material";
+import { useMutation } from "@tanstack/react-query";
 import dayjs, { Dayjs } from "dayjs";
 import { FieldArray, Form, Formik } from "formik";
 import { useParams } from "react-router";
 import { postFlight, putFlight } from "../../../api/FlightService";
+import { useSnackbar } from "../../../context/SnackbarContext";
 import { Flight } from "../../../utils/types";
+import { Button } from "../../Button";
 import { Divider } from "../../Divider";
 import { DateField } from "../../Fields/DateField";
 import { DateTimeField } from "../../Fields/DateTimeField";
@@ -42,7 +45,44 @@ interface FlightFormProps {
 }
 
 export const FlightForm = ({ selectedFlight, onClose }: FlightFormProps) => {
+	const { showSnackbar } = useSnackbar();
 	const { id } = useParams();
+
+	const postMutation = useMutation({ mutationFn: postFlight });
+	const putMutation = useMutation({
+		mutationFn: ({ id, data }: { id: string; data: Flight }) =>
+			putFlight(id, data),
+	});
+
+	const isRequestPending = postMutation.isPending || putMutation.isPending;
+
+	const handleSubmit = async (values: FlightFormValues) => {
+		const formattedFormValues = formatFormValues(values, Number(id!));
+		if (selectedFlight?.id) {
+			putMutation.mutate(
+				{ id: String(selectedFlight.id), data: formattedFormValues },
+				{
+					onSuccess: () => {
+						showSnackbar("Flight successfully updated.", "success");
+						onClose();
+					},
+					onError: (error) => {
+						showSnackbar(error.message, "error");
+					},
+				}
+			);
+		} else {
+			postMutation.mutate(formattedFormValues, {
+				onSuccess: () => {
+					showSnackbar("Flight successfully created.", "success");
+					onClose();
+				},
+				onError: (error) => {
+					showSnackbar(error.message, "error");
+				},
+			});
+		}
+	};
 
 	const verticalGap = "gap-6";
 	const horizontalGap = "gap-8";
@@ -90,15 +130,7 @@ export const FlightForm = ({ selectedFlight, onClose }: FlightFormProps) => {
 			validateOnBlur={false}
 			validateOnMount={false}
 			validationSchema={validationSchema}
-			onSubmit={async (values) => {
-				const formattedFormValues = formatFormValues(values, Number(id!));
-				if (selectedFlight?.id) {
-					await putFlight(String(selectedFlight.id), formattedFormValues);
-				} else {
-					await postFlight(formattedFormValues);
-				}
-				onClose();
-			}}
+			onSubmit={handleSubmit}
 		>
 			{({ touched, errors, setFieldError, setFieldValue, values }) => {
 				return (
@@ -279,12 +311,12 @@ export const FlightForm = ({ selectedFlight, onClose }: FlightFormProps) => {
 								</Collapse>
 							</div>
 						</Collapse>
-						<button
+						<Button
+							label="Save"
+							loading={isRequestPending}
 							type="submit"
-							className="bg-cyan-600 text-white px-10 py-1 rounded-full hover:bg-cyan-700"
-						>
-							Save
-						</button>
+							endIcon={<span className="material-symbols-outlined">send</span>}
+						/>
 					</Form>
 				);
 			}}
