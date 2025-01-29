@@ -53,6 +53,24 @@ const expandFlightData = async (body: ReqBody) => {
 		? await searchAirlines(body.airline.name)
 		: null;
 
+	const stops = body.stops
+		? await Promise.all(
+				body.stops.map(async (stop) => {
+					const airport = stop.airport?.iata
+						? await getAirportByIATA(stop.airport?.iata)
+						: null;
+
+					return {
+						airport: airport,
+						duration: {
+							hours: stop.duration.hours || 0,
+							minutes: stop.duration.minutes || 0,
+						},
+					};
+				})
+		  )
+		: [];
+
 	return {
 		...body,
 		arrival: {
@@ -64,6 +82,11 @@ const expandFlightData = async (body: ReqBody) => {
 			airport: departureAirport,
 		},
 		airline: airline,
+		duration: {
+			hours: body.duration?.hours || 0,
+			minutes: body.duration?.minutes || 0,
+		},
+		stops: stops || [],
 	};
 };
 
@@ -79,14 +102,20 @@ router.post("/", async (req, res) => {
 			return;
 		}
 
-		const updatedFlightData = await expandFlightData(body);
-
-		const flight = await Flight.create(updatedFlightData);
-		res.status(201).json(flight);
-		return;
+		try {
+			const updatedFlightData = await expandFlightData(body);
+			const flight = await Flight.create(updatedFlightData);
+			res.status(201).json(flight);
+		} catch (error) {
+			if (error instanceof ApiError) {
+				res.status(error.status).json({ message: error.message });
+				return;
+			}
+			throw error;
+		}
 	} catch (error) {
-		console.error(error);
-		res.status(400).json({ message: "Error creating new flight" });
+		console.error("Error creating flight:", error);
+		res.status(500).json({ message: "Internal server error" });
 	}
 });
 
