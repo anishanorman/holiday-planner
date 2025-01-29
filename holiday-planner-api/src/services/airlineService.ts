@@ -68,8 +68,8 @@ export async function searchAirlines(
 
 		if (!data || data.length === 0) {
 			return {
-				name: "Unknown Airline",
-				logoUrl: "default-logo.png",
+				name: `${query} (Unknown)`,
+				logoUrl: "https://images.pexels.com/photos/356079/pexels-photo-356079.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
 			};
 		}
 
@@ -80,8 +80,8 @@ export async function searchAirlines(
 	} catch (error) {
 		console.error("Error fetching airline data:", error);
 		return {
-			name: "Unknown Airline",
-			logoUrl: "default-logo.png",
+			name: `${query} (Unknown)`,
+			logoUrl: "https://images.pexels.com/photos/356079/pexels-photo-356079.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
 		};
 	}
 }

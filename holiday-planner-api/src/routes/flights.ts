@@ -86,7 +86,7 @@ router.post("/", async (req, res) => {
 		return;
 	} catch (error) {
 		console.error(error);
-		res.status(400).json({ message: "Error creating new holiday" });
+		res.status(400).json({ message: "Error creating new flight" });
 	}
 });
 
