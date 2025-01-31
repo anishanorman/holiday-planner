@@ -29,8 +29,6 @@ export interface FlightFormValues {
 	departureAirport?: string;
 	arrivalTime?: Dayjs;
 	arrivalAirport?: string;
-	hours?: number;
-	minutes?: number;
 	direct?: boolean;
 	stops?: {
 		airportCode: string;
@@ -109,10 +107,6 @@ export const FlightForm = ({ selectedFlight, onClose }: FlightFormProps) => {
 		arrivalAirport: selectedFlight?.booked
 			? selectedFlight?.arrival?.airport?.iata
 			: "",
-		hours: selectedFlight?.booked ? selectedFlight?.duration?.hours : undefined,
-		minutes: selectedFlight?.booked
-			? selectedFlight?.duration?.minutes
-			: undefined,
 		direct: selectedFlight?.booked ? selectedFlight?.stops?.length === 0 : true,
 		stops: selectedFlight?.booked
 			? selectedFlight?.stops?.map((stop) => ({
@@ -193,8 +187,6 @@ export const FlightForm = ({ selectedFlight, onClose }: FlightFormProps) => {
 										onFocus={() => setFieldError("flightNumber", "")}
 										className="w-32"
 									/>
-									<NumberField name="hours" label="Hours" />
-									<NumberField name="minutes" label="Minutes" />
 								</div>
 								<div className={`flex justify-between items-center`}>
 									<div className={`flex flex-col`}>

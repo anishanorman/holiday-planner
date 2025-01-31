@@ -40,24 +40,9 @@ export const validationSchema = Yup.object().shape({
 			schema.min(3, "Must be 3 characters").required("Required"),
 	}),
 	arrivalTime: Yup.string()
-		.when(["booked", "departureTime"], {
-			is: (booked: boolean, departureTime: string) => booked && departureTime,
-			then: (schema) =>
-				schema
-					.required("Required")
-					.test(
-						"is-after-departure",
-						"Arrival must be after departure",
-						function (value) {
-							const { departureTime } = this.parent;
-							return (
-								value &&
-								departureTime &&
-								new Date(value) > new Date(departureTime)
-							);
-						}
-					),
-			otherwise: (schema) => schema.required("Required"),
+		.when("booked", {
+			is: true,
+			then: (schema) => schema.required("Required"),
 		})
 		.when("booked", {
 			is: false,
@@ -92,17 +77,4 @@ export const validationSchema = Yup.object().shape({
 				}),
 		})
 	),
-	hours: Yup.number()
-		.default(0)
-		.test("duration-not-0", "Invalid duration", function (value) {
-			const { booked, minutes } = this.parent;
-			return !booked || Number(value) + Number(minutes) > 0;
-		}),
-	minutes: Yup.number()
-		.default(0)
-		.max(59, "Must be less than 60")
-		.test("duration-not-0", "Invalid duration", function (value) {
-			const { booked, hours } = this.parent;
-			return !booked || Number(value) + Number(hours) > 0;
-		}),
 });

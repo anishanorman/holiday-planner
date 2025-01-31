@@ -1,5 +1,6 @@
 import fetch from "node-fetch";
 import { ApiError } from "../utils/errors";
+import { getTimezone } from "./timezoneService";
 
 interface AirlineResponse {
 	iata: string;
@@ -20,7 +21,7 @@ interface AirportResponse {
 	region: string;
 	latitude: string;
 	longitude: string;
-	timezone: string;
+	UTCOffset: number;
 }
 
 interface DefaultAirline {
@@ -106,6 +107,8 @@ export async function getAirportByIATA(
 			throw new ApiError(404, `Airport with IATA code '${query}' not found.`);
 		}
 
+		const UTCOffset = await getTimezone(data[0].latitude, data[0].longitude)
+
 		const result = {
 			iata: data[0].iata,
 			name: data[0].name,
@@ -114,7 +117,7 @@ export async function getAirportByIATA(
 			country: data[0].country,
 			latitude: data[0].latitude,
 			longitude: data[0].longitude,
-			timezone: data[0].timezone
+			UTCOffset
 		};
 
 		return result;

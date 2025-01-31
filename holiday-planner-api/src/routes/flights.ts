@@ -3,34 +3,34 @@ import Flight from "../models/Flight";
 import { getAirportByIATA, searchAirlines } from "../services/airlineService";
 import { ApiError } from "../utils/errors";
 
-interface ReqBody {
+interface BookedReqBody {
 	holidayId: number;
-	airline?: {
+	airline: {
 		name: string;
 	};
-	flightNumber?: string;
+	flightNumber: string;
 	date: string;
-	departure?: {
-		time?: string;
-		place?: string;
-		airport?: {
+	departure: {
+		time: string;
+		place: string;
+		airport: {
 			iata: string;
 		};
 	};
-	arrival?: {
-		time?: string;
-		place?: string;
-		airport?: {
+	arrival: {
+		time: string;
+		place: string;
+		airport: {
 			iata: string;
 		};
 	};
-	booked: boolean;
-	duration?: {
+	booked: true;
+	duration: {
 		hours: number;
 		minutes: number;
 	};
 	stops?: {
-		airport?: {
+		airport: {
 			iata: string;
 		};
 		duration: {
@@ -40,25 +40,68 @@ interface ReqBody {
 	}[];
 }
 
-const expandFlightData = async (body: ReqBody) => {
-	const arrivalAirport = body.arrival?.airport?.iata
-		? await getAirportByIATA(body.arrival.airport.iata)
-		: null;
+interface UnbookedReqBody {
+	holidayId: number;
+	date: string;
+	departure: {
+		place: string;
+	};
+	arrival: {
+		place: string;
+	};
+	booked: false;
+}
 
-	const departureAirport = body.departure?.airport?.iata
-		? await getAirportByIATA(body.departure.airport.iata)
-		: null;
+type ReqBody = BookedReqBody | UnbookedReqBody;
 
-	const airline = body.airline?.name
-		? await searchAirlines(body.airline.name)
-		: null;
+const getFlightDuration = (
+	depTime: string,
+	depOffset: number,
+	arrTime: string,
+	arrOffset: number
+) => {
+	const offsetToMinutes = (offset: number) => offset / 60;
+
+	const depLocal = new Date(depTime);
+	const arrLocal = new Date(arrTime);
+
+	const depUTC = new Date(
+		depLocal.getTime() - offsetToMinutes(depOffset) * 60000
+	);
+	const arrUTC = new Date(
+		arrLocal.getTime() - offsetToMinutes(arrOffset) * 60000
+	);
+
+	if (arrUTC < depUTC) {
+		throw new ApiError(400, "Arrival time cannot be before departure time.");
+	}
+
+	let durationMinutes = (arrUTC.getTime() - depUTC.getTime()) / 60000;
+
+	const hours = Math.floor(durationMinutes / 60);
+	const minutes = durationMinutes % 60;
+
+	return { hours, minutes };
+};
+
+const expandFlightData = async (body: BookedReqBody) => {
+	const departureAirport = await getAirportByIATA(body.departure.airport.iata);
+
+	const arrivalAirport = await getAirportByIATA(body.arrival.airport.iata);
+
+	const airline = await searchAirlines(body.airline.name);
+
+	const duration = getFlightDuration(
+		body.departure?.time,
+		departureAirport?.UTCOffset,
+		body.arrival?.time,
+		arrivalAirport?.UTCOffset
+	);
 
 	const stops = body.stops
 		? await Promise.all(
 				body.stops.map(async (stop) => {
-					const airport = stop.airport?.iata
-						? await getAirportByIATA(stop.airport?.iata)
-						: null;
+					const airport = await getAirportByIATA(stop.airport.iata);
 
 					return {
 						airport: airport,
@@ -82,10 +125,7 @@ const expandFlightData = async (body: ReqBody) => {
 			airport: departureAirport,
 		},
 		airline: airline,
-		duration: {
-			hours: body.duration?.hours || 0,
-			minutes: body.duration?.minutes || 0,
-		},
+		duration: duration,
 		stops: stops || [],
 	};
 };

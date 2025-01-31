@@ -25,10 +25,6 @@ export const formatFormValues = (values: FlightFormValues, holidayId: number) =>
 					iata: values.arrivalAirport,
 				}
 			},
-			duration: {
-				hours: values.hours,
-				minutes: values.minutes
-			},
 			stops: values.stops?.map((stop) => ({
 				airport: {
 					iata: stop.airportCode,
