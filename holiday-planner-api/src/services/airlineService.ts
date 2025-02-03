@@ -104,7 +104,7 @@ export async function getAirportByIATA(
 		const data = (await response.json()) as AirportResponse[];
 
 		if (!data || data.length === 0) {
-			throw new ApiError(404, `Airport with IATA code '${query}' not found.`);
+			throw new ApiError(404, `Airport with code '${query}' not found.`);
 		}
 
 		const UTCOffset = await getTimezone(data[0].latitude, data[0].longitude)

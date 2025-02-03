@@ -1,7 +1,8 @@
-import { Checkbox, Collapse } from "@mui/material";
+import { Alert, Checkbox, Collapse } from "@mui/material";
 import { useMutation } from "@tanstack/react-query";
 import dayjs, { Dayjs } from "dayjs";
 import { FieldArray, Form, Formik } from "formik";
+import { useState } from "react";
 import { useParams } from "react-router";
 import { postFlight, putFlight } from "../../../api/FlightService";
 import { useSnackbar } from "../../../context/SnackbarContext";
@@ -46,6 +47,8 @@ export const FlightForm = ({ selectedFlight, onClose }: FlightFormProps) => {
 	const { showSnackbar } = useSnackbar();
 	const { id } = useParams();
 
+	const [errorMessage, setErrorMessage] = useState("");
+
 	const postMutation = useMutation({ mutationFn: postFlight });
 	const putMutation = useMutation({
 		mutationFn: ({ id, data }: { id: string; data: Flight }) =>
@@ -61,22 +64,24 @@ export const FlightForm = ({ selectedFlight, onClose }: FlightFormProps) => {
 				{ id: String(selectedFlight.id), data: formattedFormValues },
 				{
 					onSuccess: () => {
+						setErrorMessage("");
 						showSnackbar("Flight successfully updated.", "success");
 						onClose();
 					},
 					onError: (error) => {
-						showSnackbar(error.message, "error");
+						setErrorMessage(error.message);
 					},
 				}
 			);
 		} else {
 			postMutation.mutate(formattedFormValues, {
 				onSuccess: () => {
+					setErrorMessage("");
 					showSnackbar("Flight successfully created.", "success");
 					onClose();
 				},
 				onError: (error) => {
-					showSnackbar(error.message, "error");
+					setErrorMessage(error.message);
 				},
 			});
 		}
@@ -303,6 +308,7 @@ export const FlightForm = ({ selectedFlight, onClose }: FlightFormProps) => {
 								</Collapse>
 							</div>
 						</Collapse>
+						{errorMessage && <Alert severity="error">{errorMessage} Please try again.</Alert>}
 						<Button
 							label="Save"
 							loading={isRequestPending}
