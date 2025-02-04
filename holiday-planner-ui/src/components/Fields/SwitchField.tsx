@@ -4,10 +4,16 @@ import { useField } from "formik";
 interface SwitchFieldProps {
 	name: string;
 	label: string;
+	className?: string;
 	[key: string]: any;
 }
 
-export const SwitchField = ({ name, label, ...props }: SwitchFieldProps) => {
+export const SwitchField = ({
+	name,
+	label,
+	className,
+	...props
+}: SwitchFieldProps) => {
 	const [field, , helpers] = useField(name);
 	const { setValue } = helpers;
 
@@ -17,20 +23,18 @@ export const SwitchField = ({ name, label, ...props }: SwitchFieldProps) => {
 			checked={field.value}
 			onChange={(event) => setValue((event.target as HTMLInputElement).checked)}
 			control={<Switch color="primary" />}
-			label="Booked"
+			label={label}
 			labelPlacement="end"
+			className={className}
 			sx={{
 				"& .MuiSwitch-switchBase.Mui-checked": {
-					color: 'rgb(8 145 178)',
+					color: "rgb(8 145 178)",
 					"&:hover": {
-						backgroundColor: alpha(
-							'rgb(8 145 178)',
-                            0.2
-						),
+						backgroundColor: alpha("rgb(8 145 178)", 0.2),
 					},
 				},
 				"& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track": {
-					backgroundColor: 'rgb(8 145 178)',
+					backgroundColor: "rgb(8 145 178)",
 				},
 			}}
 		/>
