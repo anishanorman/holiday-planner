@@ -194,4 +194,28 @@ router.put("/:id", async (req, res) => {
 	}
 });
 
+router.delete("/:id", async (req, res) => {
+	try {
+		const { id } = req.params;
+		const flight = await Flight.findByPk(id);
+
+		if (!flight) {
+			res.status(404).json({ message: `Flight ${id} not found` });
+			return;
+		}
+
+		try {
+			await flight.destroy();
+			res.status(204).end();
+		} catch (error) {
+			if (error instanceof ApiError) {
+				res.status(error.status).json({ message: error.message });
+			}
+			throw error;
+		}
+	} catch (error) {
+		res.status(500).json({ message: "Internal server error" });
+	}
+});
+
 export default router;

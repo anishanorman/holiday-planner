@@ -1,9 +1,9 @@
 import { Alert } from "@mui/material";
-import { useState } from "react";
 import { Flight } from "../../utils/types";
 import { IconButton } from "../IconButton";
 import { FlightCard } from "./FlightCard";
 import { FlightDialog } from "./FlightDialog";
+import { useFlightDialog } from "../../context/FlightDialogContext";
 
 interface FlightsProps {
 	flights: Flight[];
@@ -11,8 +11,7 @@ interface FlightsProps {
 }
 
 export const Flights = ({ flights, refetch }: FlightsProps) => {
-	const [dialogOpen, setDialogOpen] = useState(false);
-	const [selectedFlight, setSelectedFlight] = useState<Flight | null>(null);
+	const { editFlightDialogOpen, setEditFlightDialogOpen, setSelectedFlight } = useFlightDialog();
 
 	return (
 		<div className="flex flex-col shadow-xl bg-white px-8 py-4 rounded w-fit items-center">
@@ -31,7 +30,7 @@ export const Flights = ({ flights, refetch }: FlightsProps) => {
 							flight={flight}
 							onClick={() => {
 								setSelectedFlight(flight);
-								setDialogOpen(true);
+								setEditFlightDialogOpen(true);
 							}}
 						/>
 					))
@@ -41,21 +40,19 @@ export const Flights = ({ flights, refetch }: FlightsProps) => {
 			<IconButton
 				onClick={() => {
 					setSelectedFlight(null);
-					setDialogOpen(true);
+					setEditFlightDialogOpen(true);
 				}}
 				icon="add"
 				color="cyan-700"
 				size="3xl"
 			/>
 
-			{dialogOpen && (
+			{editFlightDialogOpen && (
 				<FlightDialog
-					open={dialogOpen}
 					onClose={() => {
-						setDialogOpen(false);
+						setEditFlightDialogOpen(false);
 						refetch();
 					}}
-					selectedFlight={selectedFlight}
 				/>
 			)}
 		</div>

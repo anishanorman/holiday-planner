@@ -4,6 +4,7 @@ import { useParams } from "react-router";
 import { getHoliday } from "../api/HolidayService";
 import { Flights } from "../components/Flights/Flights";
 import { Spinner } from "../components/Spinner";
+import { FlightDialogProvider } from "../context/FlightDialogContext";
 
 export const View = () => {
 	const { id } = useParams();
@@ -28,7 +29,9 @@ export const View = () => {
 	return (
 		<div className="flex flex-col items-center gap-6 p-6">
 			<h1 className="text-2xl">{data.title}</h1>
-			<Flights flights={data.flights || []} refetch={refetch} />
+			<FlightDialogProvider>
+				<Flights flights={data.flights || []} refetch={refetch} />
+			</FlightDialogProvider>
 		</div>
 	);
 };

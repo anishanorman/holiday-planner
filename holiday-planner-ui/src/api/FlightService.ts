@@ -42,3 +42,20 @@ export const postFlight = async (flightData: Flight) => {
 	}
 };
 
+export const deleteFlight = async (id: string) => {
+	try {
+		const response = await fetch(`http://localhost:5000/api/flights/${id}`, {
+			method: "DELETE",
+			headers: {
+				"Content-Type": "application/json",
+			},
+		});
+
+		if (!response.ok) {
+			const error = await response.json();
+			throw new Error(error.message || "Failed to delete flight");
+		}
+	} catch (error) {
+		throw error;
+	}
+};
