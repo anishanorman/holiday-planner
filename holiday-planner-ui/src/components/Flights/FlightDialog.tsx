@@ -1,5 +1,5 @@
 import { Dialog, DialogContent, DialogTitle } from "@mui/material";
-import { useFlightDialog } from "../../context/FlightDialogContext";
+import { useFlights } from "../../context/FlightsContext";
 import { FlightForm } from "./FlightForm/FlightForm";
 
 export interface FlightDialogProps {
@@ -7,10 +7,15 @@ export interface FlightDialogProps {
 }
 
 export const FlightDialog = ({ onClose }: FlightDialogProps) => {
-	const { editFlightDialogOpen } = useFlightDialog();
+	const { editFlightDialogOpen } = useFlights();
 
 	return (
-		<Dialog fullWidth maxWidth={"md"} onClose={onClose} open={editFlightDialogOpen}>
+		<Dialog
+			fullWidth
+			maxWidth={"md"}
+			onClose={onClose}
+			open={editFlightDialogOpen}
+		>
 			<DialogTitle style={{ padding: "3rem 4rem 2rem 4rem" }}>
 				Edit flight details
 			</DialogTitle>

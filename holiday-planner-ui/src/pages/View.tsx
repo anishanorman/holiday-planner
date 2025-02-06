@@ -4,10 +4,12 @@ import { useParams } from "react-router";
 import { getHoliday } from "../api/HolidayService";
 import { Flights } from "../components/Flights/Flights";
 import { Spinner } from "../components/Spinner";
-import { FlightDialogProvider } from "../context/FlightDialogContext";
+import { useFlights } from "../context/FlightsContext";
+import { useEffect } from "react";
 
 export const View = () => {
 	const { id } = useParams();
+	const { setFlights } = useFlights();
 
 	const { data, isLoading, error, refetch } = useQuery({
 		queryKey: ["holiday", id],
@@ -15,6 +17,12 @@ export const View = () => {
 		enabled: !!id,
 		staleTime: 0,
 	});
+
+	useEffect(() => {
+		if (data) {
+			setFlights(data.flights || []);
+		}
+	}, [data, setFlights]);
 
 	if (isLoading) return <Spinner />;
 	if (error)
@@ -29,9 +37,8 @@ export const View = () => {
 	return (
 		<div className="flex flex-col items-center gap-6 p-6">
 			<h1 className="text-2xl">{data.title}</h1>
-			<FlightDialogProvider>
+
 				<Flights flights={data.flights || []} refetch={refetch} />
-			</FlightDialogProvider>
 		</div>
 	);
 };

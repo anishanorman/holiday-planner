@@ -1,9 +1,9 @@
 import { Alert } from "@mui/material";
+import { useFlights } from "../../context/FlightsContext";
 import { Flight } from "../../utils/types";
 import { IconButton } from "../IconButton";
 import { FlightCard } from "./FlightCard";
 import { FlightDialog } from "./FlightDialog";
-import { useFlightDialog } from "../../context/FlightDialogContext";
 
 interface FlightsProps {
 	flights: Flight[];
@@ -11,7 +11,8 @@ interface FlightsProps {
 }
 
 export const Flights = ({ flights, refetch }: FlightsProps) => {
-	const { editFlightDialogOpen, setEditFlightDialogOpen, setSelectedFlight } = useFlightDialog();
+	const { editFlightDialogOpen, setEditFlightDialogOpen, setSelectedFlight } =
+		useFlights();
 
 	return (
 		<div className="flex flex-col shadow-xl bg-white px-8 py-4 rounded w-fit items-center">

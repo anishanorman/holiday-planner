@@ -1,7 +1,7 @@
 import { Dialog, DialogContent, DialogTitle } from "@mui/material";
 import { useMutation } from "@tanstack/react-query";
 import { deleteFlight } from "../../../api/FlightService";
-import { useFlightDialog } from "../../../context/FlightDialogContext";
+import { useFlights } from "../../../context/FlightsContext";
 import { useSnackbar } from "../../../context/SnackbarContext";
 import { Button } from "../../Button";
 
@@ -10,11 +10,8 @@ export interface FlightDialogProps {
 	onClose: () => void;
 }
 
-export const DeleteFlightDialog = ({
-	open,
-	onClose,
-}: FlightDialogProps) => {
-	const { setEditFlightDialogOpen, selectedFlight } = useFlightDialog();
+export const DeleteFlightDialog = ({ open, onClose }: FlightDialogProps) => {
+	const { setEditFlightDialogOpen, selectedFlight } = useFlights();
 	const { showSnackbar } = useSnackbar();
 
 	const deleteFlightMutation = useMutation({

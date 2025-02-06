@@ -5,7 +5,7 @@ import { FieldArray, Form, Formik } from "formik";
 import { useState } from "react";
 import { useParams } from "react-router";
 import { postFlight, putFlight } from "../../../api/FlightService";
-import { useFlightDialog } from "../../../context/FlightDialogContext";
+import { useFlights } from "../../../context/FlightsContext";
 import { useSnackbar } from "../../../context/SnackbarContext";
 import { Flight } from "../../../utils/types";
 import { Button } from "../../Button";
@@ -46,7 +46,7 @@ interface FlightFormProps {
 
 export const FlightForm = ({ onClose }: FlightFormProps) => {
 	const { showSnackbar } = useSnackbar();
-	const { selectedFlight } = useFlightDialog();
+	const { selectedFlight } = useFlights();
 	const { id: holidayId } = useParams();
 
 	const [errorMessage, setErrorMessage] = useState("");
