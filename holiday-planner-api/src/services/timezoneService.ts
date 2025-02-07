@@ -1,10 +1,5 @@
+import { timezoneResponse } from "../types/timezone";
 import { ApiError } from "../utils/errors";
-
-interface timezoneResponse {
-	timezone: string;
-	utc_offset: number;
-	city: string;
-}
 
 export async function getTimezone(latitude: string, longitude: string) {
 	const url = `https://api.api-ninjas.com/v1/timezone?lat=${latitude}&lon=${longitude}`;
@@ -21,6 +16,6 @@ export async function getTimezone(latitude: string, longitude: string) {
 
 		return data.utc_offset;
 	} catch (error) {
-		throw new ApiError(404, 'Cannot find timezone information');
+		throw new ApiError(404, "Cannot find timezone information");
 	}
 }
