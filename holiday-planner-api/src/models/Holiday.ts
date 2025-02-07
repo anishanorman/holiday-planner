@@ -10,6 +10,8 @@ class Holiday extends Model {
 	public image!: object;
 	public activities!: object;
 	public accommodations!: object;
+	public createdAt!: Date;
+	public updatedAt!: Date;
 }
 
 Holiday.init(

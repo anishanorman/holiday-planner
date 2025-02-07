@@ -37,57 +37,76 @@ class Flight extends Model {
 }
 
 Flight.init(
-    {
-        date: {
-            type: DataTypes.DATEONLY,
-            allowNull: false,
-        },
-        booked: {
-            type: DataTypes.BOOLEAN,
-            allowNull: false,
-            defaultValue: false,
-        },
-        airline: {
-            type: DataTypes.JSONB,
-            allowNull: true,
-        },
-        arrival: {
-            type: DataTypes.JSONB,
-            allowNull: false,
-        },
-        departure: {
-            type: DataTypes.JSONB,
-            allowNull: false,
-        },
-        flightNumber: {
-            type: DataTypes.STRING,
-            allowNull: true,
-        },
-        duration: {
-            type: DataTypes.JSONB,
-            allowNull: true,
-        },
-        stops: {
-            type: DataTypes.JSONB,
-            allowNull: true,
-        },
-        holidayId: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-            references: {
-                model: Holiday,
-                key: "id",
-            },
-            onDelete: "CASCADE",
-        },
-    },
-    {
-        sequelize,
-        modelName: "Flight",
-        tableName: "flights",
-        timestamps: true,
-    }
+	{
+		date: {
+			type: DataTypes.DATEONLY,
+			allowNull: false,
+		},
+		booked: {
+			type: DataTypes.BOOLEAN,
+			allowNull: false,
+			defaultValue: false,
+		},
+		airline: {
+			type: DataTypes.JSONB,
+			allowNull: true,
+		},
+		arrival: {
+			type: DataTypes.JSONB,
+			allowNull: false,
+		},
+		departure: {
+			type: DataTypes.JSONB,
+			allowNull: false,
+		},
+		flightNumber: {
+			type: DataTypes.STRING,
+			allowNull: true,
+		},
+		duration: {
+			type: DataTypes.JSONB,
+			allowNull: true,
+		},
+		stops: {
+			type: DataTypes.JSONB,
+			allowNull: true,
+		},
+		holidayId: {
+			type: DataTypes.INTEGER,
+			allowNull: false,
+			references: {
+				model: Holiday,
+				key: "id",
+			},
+			onDelete: "CASCADE",
+		},
+	},
+	{
+		sequelize,
+		modelName: "Flight",
+		tableName: "flights",
+		timestamps: true,
+	}
 );
 
+const updateHolidayTimestamp = async (flight: Flight) => {
+	try {
+		const holiday = await Holiday.findByPk(flight.holidayId);
+		if (!holiday) {
+			console.error(`Holiday with ID ${flight.holidayId} not found`);
+			return;
+		}
+		holiday.changed('updatedAt', true);
+		await holiday.update({
+			updatedAt: new Date(),
+		});
+	} catch (error) {
+		console.error("Error updating holiday timestamp:", error);
+	}
+};
+
+Flight.afterCreate(updateHolidayTimestamp);
+Flight.afterUpdate(updateHolidayTimestamp);
+Flight.afterDestroy(updateHolidayTimestamp);
 
 export default Flight;
