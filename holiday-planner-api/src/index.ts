@@ -24,12 +24,12 @@ const initializeDatabase = async () => {
 	  await sequelize.authenticate();
 	  console.log('Connection to PostgreSQL established.');
   
-	  await sequelize.sync({ force: true });
+	  await sequelize.sync({ alter: true });
 	  console.log('Database synchronized.');
   
-	  await seedHolidays();
-	  await seedFlights();
-	  console.log('Database seeded with initial data.');
+	//   await seedHolidays();
+	//   await seedFlights();
+	//   console.log('Database seeded with initial data.');
 	} catch (error) {
 	  console.error('Error initializing database:', error);
 	  throw error;
