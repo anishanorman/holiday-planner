@@ -1,7 +1,7 @@
 import { Alert, Tooltip } from "@mui/material";
+import { Fragment } from "react/jsx-runtime";
 import { getFriendlyDate, getTimeFromDate } from "../../utils/dates";
 import { Flight } from "../../utils/types";
-import { Fragment } from "react/jsx-runtime";
 
 interface FlightCardProps {
 	flight: Flight;
@@ -13,6 +13,11 @@ export const FlightCard = ({ flight, onClick }: FlightCardProps) => {
 		flight.booked &&
 		new Date(flight.arrival.time).getDate() !==
 			new Date(flight.departure.time).getDate();
+
+	const dateDifference = flight.booked
+		? new Date(flight.arrival.time).getDate() -
+		  new Date(flight.departure.time).getDate()
+		: 0;
 
 	return (
 		<div
@@ -126,7 +131,9 @@ export const FlightCard = ({ flight, onClick }: FlightCardProps) => {
 															{stop.duration.minutes > 0 &&
 																` ${stop.duration.minutes}min`}
 														</p>
-														{index < flight.stops.length - 1 && (<p className="text-xxs text-gray-400">+</p>)}
+														{index < flight.stops.length - 1 && (
+															<p className="text-xxs text-gray-400">+</p>
+														)}
 													</Fragment>
 												))}
 											</div>
@@ -144,8 +151,15 @@ export const FlightCard = ({ flight, onClick }: FlightCardProps) => {
 									<p className="text-sm">
 										{getTimeFromDate(flight.arrival.time)}
 									</p>
-									{isOvernightFlight && (
-										<p className="text-xxs -translate-y-[1px]">+1</p>
+									{dateDifference < 0 && (
+										<p className="text-xxs -translate-y-[1px] ml-[1px]">
+											{dateDifference}
+										</p>
+									)}
+									{dateDifference > 0 && (
+										<p className="text-xxs -translate-y-[1px] ml-[0.5px]">
+											+{dateDifference}
+										</p>
 									)}
 								</div>
 							</div>
