@@ -20,7 +20,7 @@ At this stage, the project is set up with:
 - A **Postgres database**, hosted on AWS.
 - Dashboard to view holidays.
 - Ability to create a new holiday.
-- Ability to view and edit flights for a particular holiday.
+- Ability to view, edit and delete flights for a particular holiday.
 
 ## Getting Started
 
@@ -81,12 +81,12 @@ You'll also need a .env file, populated with the following information:
 - [x] Allow user to edit an already existing holiday.
 - [ ] Allow user to delete a holiday.
 
-### Stage 4: Basic Flight Features (In progress ⏳)
+### Stage 4: Basic Flight Features (Done ✅)
 
 - [x] Allow user to view flights.
 - [x] Allow user to add a new flight.
-- [ ] Allow user to edit an already existing flight.
-- [ ] Allow user to delete a flight.
+- [x] Allow user to edit an already existing flight.
+- [x] Allow user to delete a flight.
 
 ### Stage 5: Basic Accomodation Features
 
