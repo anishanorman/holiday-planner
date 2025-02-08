@@ -1,6 +1,7 @@
 import { DataTypes, Model } from "sequelize";
 import sequelize from "../utils/database";
 import Holiday from "./Holiday";
+import { updateHolidayTimestamp } from "../utils/updateHoliday";
 
 class Airport {
 	public iata!: string;
@@ -88,22 +89,6 @@ Flight.init(
 		timestamps: true,
 	}
 );
-
-const updateHolidayTimestamp = async (flight: Flight) => {
-	try {
-		const holiday = await Holiday.findByPk(flight.holidayId);
-		if (!holiday) {
-			console.error(`Holiday with ID ${flight.holidayId} not found`);
-			return;
-		}
-		holiday.changed('updatedAt', true);
-		await holiday.update({
-			updatedAt: new Date(),
-		});
-	} catch (error) {
-		console.error("Error updating holiday timestamp:", error);
-	}
-};
 
 Flight.afterCreate(updateHolidayTimestamp);
 Flight.afterUpdate(updateHolidayTimestamp);
