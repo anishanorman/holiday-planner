@@ -1,25 +1,25 @@
 import { DataTypes, Model } from "sequelize";
-import sequelize from "../utils/database";
-import Holiday from "./Holiday";
+import sequelize from "../config/database";
 import { updateHolidayTimestamp } from "../utils/updateHoliday";
+import Holiday from "./Holiday";
 
 class Accommodation extends Model {
 	declare id: number;
 	public holidayId!: number;
 	public accommodationName!: string;
-    public booked!: boolean;
-    public checkIn!: Date;
-    public checkOut!: Date;
-    public location!: string;
+	public booked!: boolean;
+	public checkIn!: Date;
+	public checkOut!: Date;
+	public location!: string;
 }
 
 Accommodation.init(
 	{
-        accommodationName: {
-            type: DataTypes.STRING,
-            allowNull: true,
-        },
-        booked: {
+		accommodationName: {
+			type: DataTypes.STRING,
+			allowNull: true,
+		},
+		booked: {
 			type: DataTypes.BOOLEAN,
 			allowNull: false,
 			defaultValue: false,
@@ -28,14 +28,14 @@ Accommodation.init(
 			type: DataTypes.DATEONLY,
 			allowNull: false,
 		},
-        checkOut: {
+		checkOut: {
 			type: DataTypes.DATEONLY,
 			allowNull: false,
 		},
-        location: {
-            type: DataTypes.STRING,
-            allowNull: false,
-        },
+		location: {
+			type: DataTypes.STRING,
+			allowNull: false,
+		},
 		holidayId: {
 			type: DataTypes.INTEGER,
 			allowNull: false,

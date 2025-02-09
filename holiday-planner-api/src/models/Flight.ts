@@ -1,7 +1,7 @@
 import { DataTypes, Model } from "sequelize";
-import sequelize from "../utils/database";
-import Holiday from "./Holiday";
+import sequelize from "../config/database";
 import { updateHolidayTimestamp } from "../utils/updateHoliday";
+import Holiday from "./Holiday";
 
 class Airport {
 	public iata!: string;

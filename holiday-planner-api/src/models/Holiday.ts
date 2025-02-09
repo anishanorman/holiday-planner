@@ -1,7 +1,5 @@
 import { DataTypes, Model } from "sequelize";
-import sequelize from "../utils/database";
-import Accommodation from "./Accommodation";
-import Flight from "./Flight";
+import sequelize from "../config/database";
 
 class Holiday extends Model {
 	declare id: number;
