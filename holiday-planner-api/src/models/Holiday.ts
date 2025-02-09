@@ -1,5 +1,6 @@
 import { DataTypes, Model } from "sequelize";
 import sequelize from "../utils/database";
+import Accommodation from "./Accommodation";
 import Flight from "./Flight";
 
 class Holiday extends Model {
@@ -9,7 +10,6 @@ class Holiday extends Model {
 	public endDate!: Date;
 	public image!: object;
 	public activities!: object;
-	public accommodations!: object;
 	public createdAt!: Date;
 	public updatedAt!: Date;
 }
@@ -38,10 +38,6 @@ Holiday.init(
 			type: DataTypes.JSONB,
 			allowNull: true,
 		},
-		accommodation: {
-			type: DataTypes.JSONB,
-			allowNull: true,
-		},
 	},
 	{
 		sequelize,
@@ -50,15 +46,5 @@ Holiday.init(
 		timestamps: true,
 	}
 );
-
-Holiday.hasMany(Flight, {
-	foreignKey: "holidayId",
-	as: "flights",
-});
-
-Flight.belongsTo(Holiday, {
-	foreignKey: "holidayId",
-	as: "holiday",
-});
 
 export default Holiday;
