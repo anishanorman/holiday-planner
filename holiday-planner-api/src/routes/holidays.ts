@@ -1,8 +1,7 @@
 import express from "express";
-import Accommodations from "../models/Accommodation";
+import Accommodation from "../models/Accommodation";
 import Flight from "../models/Flight";
 import Holiday from "../models/Holiday";
-import Accommodation from "../models/Accommodation";
 
 const router = express.Router();
 
@@ -20,20 +19,7 @@ router.get("/", async (_, res) => {
 
 router.get("/:id", async (req, res) => {
 	try {
-		const holiday = await Holiday.findByPk(req.params.id, {
-			include: [
-				{
-					model: Flight,
-					as: "flights",
-					required: false,
-				},
-				{
-					model: Accommodation,
-					as: "accommodations",
-					required: false,
-				},
-			],
-		});
+		const holiday = await Holiday.findByPk(req.params.id);
 
 		if (!holiday) {
 			res.status(404).json({ message: "Holiday not found" });
@@ -71,11 +57,6 @@ router.get("/:holidayId/flights", async (req, res) => {
 		const flights = await Flight.findAll({
 			where: { holidayId },
 		});
-
-		if (!flights.length) {
-			res.status(404).json({ message: "No flights found for this holiday" });
-			return;
-		}
 
 		res.json(flights);
 	} catch (error) {

@@ -17,13 +17,13 @@ export const getHolidays = async () => {
 };
 
 export const getHoliday = async (id: string): Promise<Holiday> => {
-    const response = await fetch(`http://localhost:5000/api/holidays/${id}`)
-    if (!response.ok) {
-        throw new Error("An error occured while fetching the holiday");
-    }
+	const response = await fetch(`http://localhost:5000/api/holidays/${id}`);
+	if (!response.ok) {
+		throw new Error("An error occured while fetching the holiday");
+	}
 
-    return await response.json();
-}
+	return await response.json();
+};
 
 export const postHoliday = async (values: NewHolidayFormValues) => {
 	const response = await fetch("http://localhost:5000/api/holidays", {
@@ -44,4 +44,40 @@ export const postHoliday = async (values: NewHolidayFormValues) => {
 	}
 
 	return response.json();
+};
+
+export const getFlightsByHolidayId = async (holidayId: string) => {
+	try {
+		const response = await fetch(
+			`http://localhost:5000/api/holidays/${holidayId}/flights`
+		);
+		if (!response.ok) {
+			const error = await response.json();
+			throw new Error(
+				error.message ||
+					`Failed to get flights associated with holidayId ${holidayId}`
+			);
+		}
+		return await response.json();
+	} catch (error) {
+		throw error;
+	}
+};
+
+export const getAccommodationsByHolidayId = async (holidayId: string) => {
+	try {
+		const response = await fetch(
+			`http://localhost:5000/api/holidays/${holidayId}/accommodations`
+		);
+		if (!response.ok) {
+			const error = await response.json();
+			throw new Error(
+				error.message ||
+					`Failed to get accommodations associated with holidayId ${holidayId}`
+			);
+		}
+		return await response.json();
+	} catch (error) {
+		throw error;
+	}
 };

@@ -47,7 +47,7 @@ interface FlightFormProps {
 export const FlightForm = ({ onClose }: FlightFormProps) => {
 	const { showSnackbar } = useSnackbar();
 	const { selectedFlight } = useFlights();
-	const { id: holidayId } = useParams();
+	const { holidayId } = useParams();
 
 	const [errorMessage, setErrorMessage] = useState("");
 	const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);

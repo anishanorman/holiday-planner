@@ -6,24 +6,21 @@ import { Edit } from "./pages/Edit";
 import { NewHoliday } from "./pages/NewHoliday";
 import { NotFound } from "./pages/NotFound";
 import { View } from "./pages/View";
-import { FlightsProvider } from "./context/FlightsContext";
 
 function App() {
 	return (
 		<SnackbarProvider>
-			<FlightsProvider>
 				<BrowserRouter>
 					<Routes>
 						<Route path="/" element={<Layout />}>
 							<Route index element={<Dashboard />} />
 							<Route path="holidays/new" element={<NewHoliday />} />
 							<Route path="holidays/edit/:id" element={<Edit />} />
-							<Route path="holidays/:id" element={<View />} />
+							<Route path="holidays/:holidayId" element={<View />} />
 							<Route path="*" element={<NotFound />} />
 						</Route>
 					</Routes>
 				</BrowserRouter>
-			</FlightsProvider>
 		</SnackbarProvider>
 	);
 }

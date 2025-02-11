@@ -1,13 +1,17 @@
+import { useQuery } from "@tanstack/react-query";
 import { createContext, useContext, useState } from "react";
+import { getFlightsByHolidayId } from "../api/HolidayService";
 import { Flight } from "../utils/types";
 
 interface FlightsContextType {
 	editFlightDialogOpen: boolean;
 	setEditFlightDialogOpen: (open: boolean) => void;
-	flights: Flight[] | null;
-	setFlights: (flights: Flight[] | null) => void;
+	flights: Flight[] | undefined;
 	selectedFlight: Flight | null;
 	setSelectedFlight: (flight: Flight | null) => void;
+	isLoading: boolean;
+	error: unknown;
+	refetchFlights: () => void;
 }
 
 const FlightDialogContext = createContext<FlightsContextType | undefined>(
@@ -16,12 +20,25 @@ const FlightDialogContext = createContext<FlightsContextType | undefined>(
 
 export const FlightsProvider = ({
 	children,
+	holidayId,
 }: {
 	children: React.ReactNode;
+	holidayId: number;
 }) => {
 	const [editFlightDialogOpen, setEditFlightDialogOpen] = useState(false);
-	const [flights, setFlights] = useState<Flight[] | null>(null);
 	const [selectedFlight, setSelectedFlight] = useState<Flight | null>(null);
+
+	const {
+		data: flights,
+		isLoading,
+		error,
+		refetch,
+	} = useQuery({
+		queryKey: ["flights", holidayId],
+		queryFn: () => getFlightsByHolidayId(String(holidayId)),
+		enabled: !!holidayId,
+		staleTime: 5 * 60 * 1000,
+	});
 
 	return (
 		<FlightDialogContext.Provider
@@ -29,9 +46,11 @@ export const FlightsProvider = ({
 				editFlightDialogOpen,
 				setEditFlightDialogOpen,
 				flights,
-				setFlights,
 				selectedFlight,
 				setSelectedFlight,
+				isLoading,
+				error,
+				refetchFlights: refetch,
 			}}
 		>
 			{children}
@@ -42,9 +61,7 @@ export const FlightsProvider = ({
 export const useFlights = () => {
 	const context = useContext(FlightDialogContext);
 	if (!context) {
-		throw new Error(
-			"useFlightDialog must be used within a FlightDialogProvider"
-		);
+		throw new Error("useFlights must be used within a FlightsProvider");
 	}
 	return context;
 };

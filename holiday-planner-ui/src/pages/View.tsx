@@ -4,25 +4,20 @@ import { useParams } from "react-router";
 import { getHoliday } from "../api/HolidayService";
 import { Flights } from "../components/Flights/Flights";
 import { Spinner } from "../components/Spinner";
-import { useFlights } from "../context/FlightsContext";
-import { useEffect } from "react";
+import { FlightsProvider } from "../context/FlightsContext";
 
 export const View = () => {
-	const { id } = useParams();
-	const { setFlights } = useFlights();
+	const { holidayId } = useParams();
 
-	const { data, isLoading, error, refetch } = useQuery({
-		queryKey: ["holiday", id],
-		queryFn: () => getHoliday(id!),
-		enabled: !!id,
-		staleTime: 0,
+	const {
+		data: holiday,
+		isLoading,
+		error,
+	} = useQuery({
+		queryKey: ["holiday", holidayId],
+		queryFn: () => getHoliday(String(holidayId)),
+		enabled: !!holidayId,
 	});
-
-	useEffect(() => {
-		if (data) {
-			setFlights(data.flights || []);
-		}
-	}, [data, setFlights]);
 
 	if (isLoading) return <Spinner />;
 	if (error)
@@ -32,13 +27,14 @@ export const View = () => {
 			</Alert>
 		);
 
-	if (!data) return <Alert severity="info">No holiday found.</Alert>;
+	if (!holiday) return <Alert severity="info">No holiday found.</Alert>;
 
 	return (
 		<div className="flex flex-col items-center gap-6 p-6">
-			<h1 className="text-2xl">{data.title}</h1>
-
-				<Flights flights={data.flights || []} refetch={refetch} />
+			<h1 className="text-2xl">{holiday.title}</h1>
+			<FlightsProvider holidayId={parseInt(holidayId!)}>
+				<Flights />
+			</FlightsProvider>
 		</div>
 	);
 };
