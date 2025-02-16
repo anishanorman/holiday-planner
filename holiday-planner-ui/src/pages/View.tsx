@@ -5,6 +5,8 @@ import { getHoliday } from "../api/HolidayService";
 import { Flights } from "../components/Flights/Flights";
 import { Spinner } from "../components/Spinner";
 import { FlightsProvider } from "../context/FlightsContext";
+import { AccommodationsProvider } from "../context/AccommodationsContext";
+import { Accommodations } from "../components/Accommodations/Accommodations";
 
 export const View = () => {
 	const { holidayId } = useParams();
@@ -35,6 +37,9 @@ export const View = () => {
 			<FlightsProvider holidayId={parseInt(holidayId!)}>
 				<Flights />
 			</FlightsProvider>
+			<AccommodationsProvider holidayId={parseInt(holidayId!)}>
+				<Accommodations />
+			</AccommodationsProvider>
 		</div>
 	);
 };
