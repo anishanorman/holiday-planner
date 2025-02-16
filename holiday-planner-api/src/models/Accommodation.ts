@@ -6,7 +6,7 @@ import Holiday from "./Holiday";
 class Accommodation extends Model {
 	declare id: number;
 	public holidayId!: number;
-	public accommodationName!: string;
+	public name!: string;
 	public booked!: boolean;
 	public checkIn!: Date;
 	public checkOut!: Date;
@@ -15,7 +15,7 @@ class Accommodation extends Model {
 
 Accommodation.init(
 	{
-		accommodationName: {
+		name: {
 			type: DataTypes.STRING,
 			allowNull: true,
 		},
@@ -23,6 +23,10 @@ Accommodation.init(
 			type: DataTypes.BOOLEAN,
 			allowNull: false,
 			defaultValue: false,
+		},
+		bookingReference: {
+			type: DataTypes.STRING,
+			allowNull: true,
 		},
 		checkIn: {
 			type: DataTypes.DATEONLY,

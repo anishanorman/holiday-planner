@@ -4,16 +4,18 @@ export const seedAccommodations = async () => {
 	const accommodations = [
 		{
 			holidayId: 2,
-			accommodationName: "Hotel Fancy",
+			name: "Hotel Fancy",
 			booked: true,
+			bookingReference: "00000000",
 			checkIn: "2024-06-01",
 			checkOut: "2024-06-17",
 			location: "Auckland",
 		},
 		{
 			holidayId: 2,
-			accommodationName: "Hotel Fancier",
+			name: "Hotel Fancier",
 			booked: true,
+			bookingReference: "12345678",
 			checkIn: "2024-06-17",
 			checkOut: "2024-06-18",
 			location: "Hobbiton",

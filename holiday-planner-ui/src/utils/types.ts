@@ -88,9 +88,12 @@ export interface Activity {
 }
 
 export interface Accommodation {
+	id: number;
+	holidayId: number;
 	name: string;
 	location: string;
 	booked: boolean;
+	bookingReference: string;
 	checkIn: string;
 	checkOut: string;
 }
